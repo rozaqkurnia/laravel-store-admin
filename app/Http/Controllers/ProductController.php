@@ -37,6 +37,8 @@ class ProductController extends Controller
             'price' => $request->price,
         ]);
 
+        \App\Jobs\ProductCreated::dispatch($product->toArray());
+
         return response($product, Response::HTTP_CREATED);
     }
 
@@ -59,6 +61,8 @@ class ProductController extends Controller
             'price' => $request->price,
         ]);
 
+        \App\Jobs\ProductUpdated::dispatch($product->toArray());
+
         return response($product, Response::HTTP_ACCEPTED);
     }
 
@@ -69,6 +73,7 @@ class ProductController extends Controller
             return response(null, Response::HTTP_NOT_FOUND);
         }
         $product->delete();
+        \App\Jobs\ProductDeleted::dispatch($id);
         return response(null, Response::HTTP_NO_CONTENT);
     }
 }
