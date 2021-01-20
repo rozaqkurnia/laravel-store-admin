@@ -37,7 +37,7 @@ class ProductController extends Controller
             'price' => $request->price,
         ]);
 
-        \App\Jobs\ProductCreated::dispatch($product->toArray());
+        \App\Jobs\ProductCreated::dispatch($product->toArray())->onQueue('main_queue');
 
         return response($product, Response::HTTP_CREATED);
     }
@@ -61,7 +61,7 @@ class ProductController extends Controller
             'price' => $request->price,
         ]);
 
-        \App\Jobs\ProductUpdated::dispatch($product->toArray());
+        \App\Jobs\ProductUpdated::dispatch($product->toArray())->onQueue('main_queue');
 
         return response($product, Response::HTTP_ACCEPTED);
     }
@@ -73,7 +73,7 @@ class ProductController extends Controller
             return response(null, Response::HTTP_NOT_FOUND);
         }
         $product->delete();
-        \App\Jobs\ProductDeleted::dispatch($id);
+        \App\Jobs\ProductDeleted::dispatch($id)->onQueue('main_queue');
         return response(null, Response::HTTP_NO_CONTENT);
     }
 }
